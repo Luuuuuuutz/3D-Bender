@@ -1,0 +1,14 @@
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Release\3D Bender.exe.config
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Release\3D Bender.exe
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Release\3D Bender.pdb
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\3D Bender.csprojAssemblyReference.cache
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\_3D_Bender.Form1.resources
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\_3D_Bender.Properties.Resources.resources
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\3D Bender.csproj.GenerateResource.cache
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\3D Bender.exe
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\3D Bender.pdb
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\UserControl1.g.cs
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\3D Bender_MarkupCompile.cache
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\3D Bender_MarkupCompile.lref
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\UserControl1.baml
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Release\3D Bender.g.resources

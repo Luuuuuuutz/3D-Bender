@@ -1,0 +1,22 @@
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Debug\3D Bender.exe.config
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Debug\3D Bender.exe
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Debug\3D Bender.pdb
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender.csprojAssemblyReference.cache
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\_3D_Bender.Form1.resources
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\_3D_Bender.Properties.Resources.resources
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender.csproj.GenerateResource.cache
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender.exe
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender.pdb
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Debug\HelixToolkit.dll
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Debug\HelixToolkit.Wpf.dll
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Debug\HelixToolkit.xml
+C:\Users\eric\source\repos\3D Bender\3D Bender\bin\Debug\HelixToolkit.Wpf.xml
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender.csproj.CopyComplete
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\UserControl1.g.cs
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender_MarkupCompile.cache
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender_MarkupCompile.lref
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\UserControl1.baml
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender.g.resources
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\_3D_Bender.Form2.resources
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\3D Bender.csproj.CoreCompileInputs.cache
+C:\Users\eric\source\repos\3D Bender\3D Bender\obj\Debug\_3D_Bender.Form3.resources
