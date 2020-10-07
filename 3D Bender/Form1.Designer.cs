@@ -215,14 +215,14 @@
             this.englishToolStripMenuItem,
             this.metricToolStripMenuItem});
             this.unitsToolStripMenuItem.Name = "unitsToolStripMenuItem";
-            this.unitsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.unitsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.unitsToolStripMenuItem.Text = "Units";
             // 
             // englishToolStripMenuItem
             // 
             this.englishToolStripMenuItem.CheckOnClick = true;
             this.englishToolStripMenuItem.Name = "englishToolStripMenuItem";
-            this.englishToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.englishToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.englishToolStripMenuItem.Text = "English";
             this.englishToolStripMenuItem.Click += new System.EventHandler(this.EnglishToolStripMenuItem_Click);
             // 
@@ -233,14 +233,14 @@
             this.metricToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.metricToolStripMenuItem.Enabled = false;
             this.metricToolStripMenuItem.Name = "metricToolStripMenuItem";
-            this.metricToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.metricToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.metricToolStripMenuItem.Text = "Metric";
             this.metricToolStripMenuItem.Click += new System.EventHandler(this.MetricToolStripMenuItem_Click);
             // 
             // benderConfigToolStripMenuItem
             // 
             this.benderConfigToolStripMenuItem.Name = "benderConfigToolStripMenuItem";
-            this.benderConfigToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.benderConfigToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.benderConfigToolStripMenuItem.Text = "Bender Config";
             this.benderConfigToolStripMenuItem.Click += new System.EventHandler(this.benderConfigToolStripMenuItem_Click);
             // 
@@ -807,7 +807,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "3D Bender Interface";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);

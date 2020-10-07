@@ -12,6 +12,7 @@ namespace _3D_Bender
 {
     public partial class Form1 : Form
     {
+        //Test comment for github
         readonly string exePath = System.Reflection.Assembly.GetEntryAssembly().Location;
         string localPath = "";
 
