@@ -13,8 +13,8 @@
     <ANegLimit>-60</ANegLimit>
     <BPosLimit>30</BPosLimit>
     <BNegLimit>-30</BNegLimit>
-    <StepsPerUnitX>10000</StepsPerUnitX>
-    <StepsPerUnitY>10000</StepsPerUnitY>
+    <StepsPerUnitX>500</StepsPerUnitX>
+    <StepsPerUnitY>500</StepsPerUnitY>
     <StepsPerUnitZ>100</StepsPerUnitZ>
     <StepsPerUnitA>55.555555555555557</StepsPerUnitA>
     <StepsPerUnitB>55.555555555555557</StepsPerUnitB>

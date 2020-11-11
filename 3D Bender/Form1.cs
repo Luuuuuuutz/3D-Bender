@@ -994,24 +994,24 @@ namespace _3D_Bender
             try
             {
                 if (!(serialPort1.IsOpen))
-            {
-                serialPort1.PortName = COMPortComboBox.SelectedItem.ToString();
-                serialPort1.Open();
-                serialConnectButton.Text = "Disconnect";
+                {
+                    serialPort1.PortName = COMPortComboBox.SelectedItem.ToString();
+                    serialPort1.Open();
+                    serialConnectButton.Text = "Disconnect";
 
-                positionControlGroupBox.Enabled = true;
-                jogControlGroupBox.Enabled = true;
-                homeAxesGroupBox.Enabled = true;
-            }
-            else if (serialPort1.IsOpen)
-            {
-                serialPort1.Close();
-                serialConnectButton.Text = "Conenct";
+                    positionControlGroupBox.Enabled = true;
+                    jogControlGroupBox.Enabled = true;
+                    homeAxesGroupBox.Enabled = true;
+                }
+                else if (serialPort1.IsOpen)
+                {
+                    serialPort1.Close();
+                    serialConnectButton.Text = "Conenct";
 
-                positionControlGroupBox.Enabled = false;
-                jogControlGroupBox.Enabled = false;
-                homeAxesGroupBox.Enabled = false;
-            }
+                    positionControlGroupBox.Enabled = false;
+                    jogControlGroupBox.Enabled = false;
+                    homeAxesGroupBox.Enabled = false;
+                }
             }
             catch(Exception ex)
             {
@@ -1184,15 +1184,14 @@ namespace _3D_Bender
                 settings.Columns[i].AllowDBNull = false;
             }
 
-            double gearRatio = 100;
-            double stepsPerUnitXY = (360 / 1.8) * gearRatio / 2;
-            gearRatio = 1;
-            double stepsPerUnitZ = (360 / 1.8) * gearRatio / 2;
+            double gearRatioXY = 5;
+            double gearRatioZ = 1;
+            double stepsPerUnitXY = (360 / 1.8) * gearRatioXY / 2;
+            double stepsPerUnitZ = (360 / 1.8) * gearRatioZ / 2;
 
-            gearRatio = 100;
-            double stepsPerUnitAB = gearRatio / 1.8;
-
-
+            double gearRatioAB = 100;
+            double stepsPerUnitAB = gearRatioAB / 1.8;
+            
             settings.Rows.Add(new object[]
                 {"5-Axis Bender", "mm", 12 * 25.4, 28, -21, 8, 26, 305, -5, 60, -60, 30, -30, stepsPerUnitXY, stepsPerUnitXY, stepsPerUnitZ, stepsPerUnitAB, stepsPerUnitAB, 15.79 });
 

@@ -437,6 +437,7 @@
             this.actualPosXTextBox.Name = "actualPosXTextBox";
             this.actualPosXTextBox.Size = new System.Drawing.Size(54, 20);
             this.actualPosXTextBox.TabIndex = 24;
+            this.actualPosXTextBox.Text = "0.000";
             // 
             // label1
             // 
@@ -463,6 +464,7 @@
             this.actualPosYTextBox.Name = "actualPosYTextBox";
             this.actualPosYTextBox.Size = new System.Drawing.Size(54, 20);
             this.actualPosYTextBox.TabIndex = 26;
+            this.actualPosYTextBox.Text = "0.000";
             // 
             // label3
             // 
@@ -480,6 +482,7 @@
             this.actualPosZTextBox.Name = "actualPosZTextBox";
             this.actualPosZTextBox.Size = new System.Drawing.Size(54, 20);
             this.actualPosZTextBox.TabIndex = 28;
+            this.actualPosZTextBox.Text = "0.000";
             // 
             // label4
             // 
@@ -497,6 +500,7 @@
             this.actualPosATextBox.Name = "actualPosATextBox";
             this.actualPosATextBox.Size = new System.Drawing.Size(54, 20);
             this.actualPosATextBox.TabIndex = 30;
+            this.actualPosATextBox.Text = "0.000";
             // 
             // label5
             // 
@@ -514,6 +518,7 @@
             this.actualPosBTextBox.Name = "actualPosBTextBox";
             this.actualPosBTextBox.Size = new System.Drawing.Size(54, 20);
             this.actualPosBTextBox.TabIndex = 32;
+            this.actualPosBTextBox.Text = "0.000";
             // 
             // moveToPosXButton
             // 
