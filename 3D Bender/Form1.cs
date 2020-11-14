@@ -24,13 +24,16 @@ namespace _3D_Bender
         public DataTable dt = new DataTable() { TableName = "BendProfile" };
         public DataTable settings = new DataTable() { TableName = "Settings" };
 
-        double materialLength = 12.0 * 25.4;    //Placeholder until I figure out something better
-        double overBendMultiplier = 1.0;        //Additional radius bending multiplier
+        double materialLength = 200;    //Placeholder until I figure out something better
 
         double[,] R = new double[,] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };  //Initialize coordinate converter R made of columns of x y z vectors
 
         string jogButtonPressed = "";
         string buffer = String.Empty;
+
+        List<string> GCodeList = new List<string>();
+        bool zFlag = false; //zFlag to match what the bender is doing
+        bool nextLine = false;  //Flag to watch if the bender is expecting another line
 
         public Form1()
         {
@@ -137,6 +140,8 @@ namespace _3D_Bender
                 Type.GetType("System.Double"));
             settings.Columns.Add("BendingHeadFixedDist",
                 Type.GetType("System.Double"));
+            settings.Columns.Add("OverBendMultiplier",
+                Type.GetType("System.Double"));
 
             //Make each column required
             for (int i = 0; i < settings.Columns.Count; i++)
@@ -149,6 +154,8 @@ namespace _3D_Bender
             {
                 settings.ReadXml(sr);
             }
+
+            materialLength = Convert.ToDouble(settings.Rows[0][2]);
 
             dt.Rows.Add(new object[]
                 {1, "0", 0, Convert.ToDouble(settings.Rows[0][18].ToString())});
@@ -545,6 +552,7 @@ namespace _3D_Bender
             double stepsPerUnitZ = Math.Round(Convert.ToDouble(settings.Rows[0][15].ToString()), 3);
             double stepsPerUnitA = Math.Round(Convert.ToDouble(settings.Rows[0][16].ToString()), 3);
             double stepsPerUnitB = Math.Round(Convert.ToDouble(settings.Rows[0][17].ToString()), 3);
+            double overBendMultiplier = Convert.ToDouble(settings.Rows[0][19]);
 
             double zAccum = 0;
 
@@ -611,6 +619,7 @@ namespace _3D_Bender
 
                             HeadPosition hp = new HeadPosition();
                             ComputeHeadPosition(radius, tiltAngleZ, hp);
+
                             sw.WriteLine("G1 X" + hp.X.ToString() + " Y" + hp.Y.ToString() + " Z" + zAccum.ToString() + " A" + hp.A.ToString() + " B" + hp.B.ToString());
                         }
                         if (radiusFull != "0" && radiusFull.Contains("|"))
@@ -664,9 +673,125 @@ namespace _3D_Bender
             }
         }
 
+        public void GenerateGCodeListUSB()
+        {
+            double stepsPerUnitX = Math.Round(Convert.ToDouble(settings.Rows[0][13].ToString()), 3);
+            double stepsPerUnitY = Math.Round(Convert.ToDouble(settings.Rows[0][14].ToString()), 3);
+            double stepsPerUnitZ = Math.Round(Convert.ToDouble(settings.Rows[0][15].ToString()), 3);
+            double stepsPerUnitA = Math.Round(Convert.ToDouble(settings.Rows[0][16].ToString()), 3);
+            double stepsPerUnitB = Math.Round(Convert.ToDouble(settings.Rows[0][17].ToString()), 3);
+            double overBendMultiplier = Convert.ToDouble(settings.Rows[0][19]);
+
+            double zAccum = 0;
+
+            string path = "";
+
+            if (Convert.ToDouble(totalMaterialTextBox.Text) > materialLength)
+            {
+                MessageBox.Show("Bend profile too long for stock!");
+                return;
+            }
+
+            //First set the steps per unit (dependent on unit settings)
+            GCodeList.Add("M92 X" + stepsPerUnitX.ToString() + " Y" + stepsPerUnitY.ToString() + " Z" + stepsPerUnitZ.ToString() + " A" + stepsPerUnitA.ToString() + " B" + stepsPerUnitB.ToString());
+
+            GCodeList.Add("G21");    //Set units to mm (positions will be converted from english to metric if necessary
+
+            GCodeList.Add("G90");    //Set to absolute mode
+            GCodeList.Add("M17");    //Enable all steppers
+            GCodeList.Add("G28.1 X0 Y0 Z0 A0 B0");   //Set home position to 0 0 0 0 0
+            GCodeList.Add("G28");    //Move to home position
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells[0].Value != null)
+                {
+                    string radiusFull = row.Cells[1].Value.ToString();
+
+                    double tiltAngleZ = Convert.ToDouble(row.Cells[2].Value.ToString());
+                    double feed = Convert.ToDouble(row.Cells[3].Value.ToString());
+
+                    //Loop through each row and write the G code
+                    if (radiusFull == "0")    //If the radius is 0 then it is a straight feed
+                    {
+                        zAccum += feed;  //Accumulate the total feed because we are in absolute position mode
+                        GCodeList.Add("G1 X0 Y0 Z" + zAccum.ToString() + " A0 B0");
+                    }
+                    if (radiusFull != "0" && !radiusFull.Contains("|"))
+                    {
+                        //The radius must not be 0 which means its a circular arc
+                        double radius = Convert.ToDouble(radiusFull) / overBendMultiplier;   //Radius / overBend to get new radius
+                        zAccum += feed;     //Accumulate the total feed because we are in absolute position mode
+
+                        HeadPosition hp = new HeadPosition();
+                        ComputeHeadPosition(radius, tiltAngleZ, hp);
+
+                        GCodeList.Add("G1 X" + hp.X.ToString() + " Y" + hp.Y.ToString() + " Z" + zAccum.ToString() + " A" + hp.A.ToString() + " B" + hp.B.ToString());
+                    }
+                    if (radiusFull != "0" && radiusFull.Contains("|"))
+                    {
+                        //This is the case where we have a helix with the number of rotations R|N
+                        int pos = radiusFull.IndexOf("|");
+                        double radius = Convert.ToDouble(radiusFull.Remove(pos)) / overBendMultiplier;
+                        if (englishToolStripMenuItem.Checked)
+                            radius = radius * 25.4; //Convert to mm
+
+                        double pitch = Convert.ToDouble(radiusFull.Remove(0, pos + 1));
+                        if (englishToolStripMenuItem.Checked)
+                            pitch = pitch * 25.4; //Convert to mm
+
+                        int N = 100;
+                        double lengthPerRotation = Math.Sqrt(Math.Pow(pitch, 2) + Math.Pow(2 * Math.PI * radius, 2));
+                        double turns = (feed / lengthPerRotation);
+                        double height = turns * pitch;
+
+                        double tiltTotal = 2 * Math.PI * Math.Atan2(height, 2 * Math.PI * radius) * 180 / Math.PI;
+
+                        for (int k = 1; k <= N; k++)
+                        {
+                            double inProgFeed = feed / N; //Divide up the section into 100 sections
+
+                            double inProgTiltAngleZ = (k * tiltTotal / N) + tiltAngleZ;
+
+                            zAccum += inProgFeed;     //Accumulate the total feed because we are in absolute position mode
+
+                            HeadPosition hp = new HeadPosition();
+                            ComputeHeadPosition(radius, inProgTiltAngleZ, hp);
+                            GCodeList.Add("G1 X" + hp.X.ToString() + " Y" + hp.Y.ToString() + " Z" + zAccum.ToString() + " A" + hp.A.ToString() + " B" + hp.B.ToString());
+                        }
+
+                    }
+                }
+            }
+
+            //Now we have to make sure we push out the remaining material, if necessary
+            if (zAccum < materialLength)
+            {
+                //double remainingMaterial = materialLength - zAccum;
+                GCodeList.Add("G1 Z" + materialLength.ToString());
+            }
+
+            //Once we are done with all of the bend profile we have to do a few more lines
+            GCodeList.Add("G28");    //Go home after bending
+            GCodeList.Add("M18");    //Disable stepper motors
+            GCodeList.Add("M02");    //End of program
+
+        }
+
         public void ComputeHeadPosition(double R, double theta, HeadPosition hp)
         {
             //This function computes the requied position of the bending head to get the desired curve. Lots of math
+            double xPosLimit = Convert.ToDouble(settings.Rows[0][3]);
+            double xNegLimit = Convert.ToDouble(settings.Rows[0][4]);
+            double yPosLimit = Convert.ToDouble(settings.Rows[0][5]);
+            double yNegLimit = Convert.ToDouble(settings.Rows[0][6]);
+            double zPosLimit = Convert.ToDouble(settings.Rows[0][7]);
+            double zNegLimit = Convert.ToDouble(settings.Rows[0][8]);
+            double aPosLimit = Convert.ToDouble(settings.Rows[0][9]);
+            double aNegLimit = Convert.ToDouble(settings.Rows[0][10]);
+            double bPosLimit = Convert.ToDouble(settings.Rows[0][11]);
+            double bNegLimit = Convert.ToDouble(settings.Rows[0][12]);
+
             double z = Convert.ToDouble(settings.Rows[0][18].ToString());   //Distance from the fixed point to bending point. Constant, dependant on physical design
 
             theta = theta * Math.PI / 180;  //Convert to radians
@@ -674,7 +799,16 @@ namespace _3D_Bender
             double d = R - Math.Sqrt(Math.Pow(R, 2) - Math.Pow(z, 2));
 
             hp.X = -Math.Round((Math.Sin(theta) * d), 3);   //Flipped because the tilt angle is defined as rotation around z axis which is backwards for x
+            if (hp.X > xPosLimit)
+                hp.X = xPosLimit;
+            if (hp.X < xNegLimit)
+                hp.X = xNegLimit;
+
             hp.Y = Math.Round((Math.Cos(theta) * d), 3);
+            if (hp.Y > yPosLimit)
+                hp.Y = yPosLimit;
+            if (hp.Y < yNegLimit)
+                hp.Y = yNegLimit;
 
             Point3D bendPoint = new Point3D(hp.X, hp.Y, z);    //Create bend point
             Point3D centerPoint = new Point3D(R * Math.Sin(theta), R * Math.Cos(theta), 0);    //Center point of the circle
@@ -688,9 +822,17 @@ namespace _3D_Bender
             Point3D tangentLine = matrix.CrossProductP(normalTilt, normalTangent);      //tangentLine = normalTilt X normalTangent
 
             //Finally we can find the angles A and B
-            hp.A = -Math.Round(90 - (Math.Acos(tangentLine.Y / (Math.Sqrt(Math.Pow(tangentLine.X, 2) + Math.Pow(tangentLine.Y, 2) + Math.Pow(tangentLine.Z, 2))))) * 180 / Math.PI, 3);
-            hp.B = Math.Round(90 - (Math.Acos(tangentLine.X / (Math.Sqrt(Math.Pow(tangentLine.X, 2) + Math.Pow(tangentLine.Y, 2) + Math.Pow(tangentLine.Z, 2))))) * 180 / Math.PI, 3);
+            hp.A = Math.Round(90 - (Math.Acos(tangentLine.Y / (Math.Sqrt(Math.Pow(tangentLine.X, 2) + Math.Pow(tangentLine.Y, 2) + Math.Pow(tangentLine.Z, 2))))) * 180 / Math.PI, 3);
+            if (hp.A > aPosLimit)
+                hp.A = aPosLimit;
+            if (hp.A < aNegLimit)
+                hp.A = aNegLimit;
 
+            hp.B = Math.Round(90 - (Math.Acos(tangentLine.X / (Math.Sqrt(Math.Pow(tangentLine.X, 2) + Math.Pow(tangentLine.Y, 2) + Math.Pow(tangentLine.Z, 2))))) * 180 / Math.PI, 3);
+            if (hp.B > bPosLimit)
+                hp.B = bPosLimit;
+            if (hp.B < bNegLimit)
+                hp.B = bNegLimit;
         }
 
         private void DataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -880,58 +1022,63 @@ namespace _3D_Bender
 
         public void UpdatePositionalData(string buffer)
         {
-            //First split the string into two pieces
-            string[] data = buffer.Split(';');
-            string[] actualPos = data[0].Split(',');
-            string[] commandedPos = data[1].Split(',');
+            try
+            {
 
-            actualPosXTextBox.Invoke((Action)delegate
-            {
-                actualPosXTextBox.Text = actualPos[1].Replace("X", "");
-            });
+                //First split the string into two pieces
+                string[] data = buffer.Split(';');
+                string[] actualPos = data[0].Split(',');
+                string[] commandedPos = data[1].Split(',');
 
-            actualPosYTextBox.Invoke((Action)delegate
-            {
-                actualPosYTextBox.Text = actualPos[2].Replace("Y", "");
-            });
+                actualPosXTextBox.Invoke((Action)delegate
+                {
+                    actualPosXTextBox.Text = actualPos[0];
+                });
 
-            actualPosZTextBox.Invoke((Action)delegate
-            {
-                actualPosZTextBox.Text = actualPos[3].Replace("Z", "");
-            });
+                actualPosYTextBox.Invoke((Action)delegate
+                {
+                    actualPosYTextBox.Text = actualPos[1];
+                });
 
-            actualPosATextBox.Invoke((Action)delegate
-            {
-                actualPosATextBox.Text = actualPos[4].Replace("A", "");
-            });
+                actualPosZTextBox.Invoke((Action)delegate
+                {
+                    actualPosZTextBox.Text = actualPos[2];
+                });
 
-            actualPosBTextBox.Invoke((Action)delegate
-            {
-                actualPosBTextBox.Text = actualPos[5].Replace("B", "");
-            });
+                actualPosATextBox.Invoke((Action)delegate
+                {
+                    actualPosATextBox.Text = actualPos[3];
+                });
 
-            //Update commanded position text boxes
-            commandPosXTextBox.Invoke((Action)delegate
-            {
-                commandPosXTextBox.Text = commandedPos[1].Replace("X", "");
-            });
+                actualPosBTextBox.Invoke((Action)delegate
+                {
+                    actualPosBTextBox.Text = actualPos[4];
+                });
 
-            commandPosYTextBox.Invoke((Action)delegate
-            {
-                commandPosYTextBox.Text = commandedPos[2].Replace("Y", "");
-            });
-            commandPosZTextBox.Invoke((Action)delegate
-            {
-                commandPosZTextBox.Text = commandedPos[3].Replace("Z", "");
-            });
-            commandPosATextBox.Invoke((Action)delegate
-            {
-                commandPosATextBox.Text = commandedPos[4].Replace("A", "");
-            });
-            commandPosBTextBox.Invoke((Action)delegate
-            {
-                commandPosBTextBox.Text = commandedPos[5].Replace("B", "");
-            });
+                //Update commanded position text boxes
+                commandPosXTextBox.Invoke((Action)delegate
+                {
+                    commandPosXTextBox.Text = commandedPos[0];
+                });
+
+                commandPosYTextBox.Invoke((Action)delegate
+                {
+                    commandPosYTextBox.Text = commandedPos[1];
+                });
+                commandPosZTextBox.Invoke((Action)delegate
+                {
+                    commandPosZTextBox.Text = commandedPos[2];
+                });
+                commandPosATextBox.Invoke((Action)delegate
+                {
+                    commandPosATextBox.Text = commandedPos[3];
+                });
+                commandPosBTextBox.Invoke((Action)delegate
+                {
+                    commandPosBTextBox.Text = commandedPos[4];
+                });
+            }
+            catch { }
 
         }
 
@@ -942,39 +1089,99 @@ namespace _3D_Bender
             char dir = jogButtonPressed[1];
 
             double nextPosition = 0;
-            double deltaPosition;
+            double deltaPosition = 0.1;
 
-            if (dir == '+')
-                deltaPosition = 0.01;
-            else
-                deltaPosition = -0.01;
+            if (jog01RadioBtn.Checked)
+            {
+                deltaPosition = 0.1;
+            }
+            if (jog1RadioBtn.Checked)
+            {
+                deltaPosition = 1.0;
+            }
+
+            if (dir == '-')
+            {
+                deltaPosition *= -1;
+            }
+
+
+            string command = "G1 ";
 
             if (axis == 'X')
             {
+
                 nextPosition = Convert.ToDouble(actualPosXTextBox.Text) + deltaPosition;
+                command += "X";
+                command += nextPosition.ToString();
+                command += " Y";
+                command += actualPosYTextBox.Text;
+                command += " Z";
+                command += actualPosZTextBox.Text;
+                command += " A";
+                command += actualPosATextBox.Text;
+                command += " B";
+                command += actualPosBTextBox.Text;
+
             }
             if (axis == 'Y')
             {
                 nextPosition = Convert.ToDouble(actualPosYTextBox.Text) + deltaPosition;
+                command += " X";
+                command += actualPosXTextBox.Text;
+                command += "Y";
+                command += nextPosition.ToString();
+                command += " Z";
+                command += actualPosZTextBox.Text;
+                command += " A";
+                command += actualPosATextBox.Text;
+                command += " B";
+                command += actualPosBTextBox.Text;
             }
             if (axis == 'Z')
             {
                 nextPosition = Convert.ToDouble(actualPosZTextBox.Text) + deltaPosition;
+                command += " X";
+                command += actualPosXTextBox.Text;
+                command += "Y";
+                command += actualPosYTextBox.Text;
+                command += " Z";
+                command += nextPosition.ToString();
+                command += " A";
+                command += actualPosATextBox.Text;
+                command += " B";
+                command += actualPosBTextBox.Text;
             }
             if (axis == 'A')
             {
                 nextPosition = Convert.ToDouble(actualPosATextBox.Text) + deltaPosition;
+                command += " X";
+                command += actualPosXTextBox.Text;
+                command += "Y";
+                command += actualPosYTextBox.Text;
+                command += " Z";
+                command += actualPosZTextBox.Text;
+                command += " A";
+                command += nextPosition.ToString();
+                command += " B";
+                command += actualPosBTextBox.Text;
             }
             if (axis == 'B')
             {
                 nextPosition = Convert.ToDouble(actualPosBTextBox.Text) + deltaPosition;
+                command += " X";
+                command += actualPosXTextBox.Text;
+                command += "Y";
+                command += actualPosYTextBox.Text;
+                command += " Z";
+                command += actualPosZTextBox.Text;
+                command += " A";
+                command += actualPosATextBox.Text;
+                command += " B";
+                command += nextPosition.ToString();
             }
 
             //Build the G-Code command: G1 X/Y/Z/A/Bnnnn.nnn
-            string command = "G1 ";
-            command += dir.ToString();
-            command += " ";
-            command += nextPosition.ToString();
 
             SerialWrite(command);   //Write the command to the serial interface
         }
@@ -993,27 +1200,34 @@ namespace _3D_Bender
         {
             try
             {
-                if (!(serialPort1.IsOpen))
+                if (!(COMPortComboBox.Text == string.Empty))
                 {
-                    serialPort1.PortName = COMPortComboBox.SelectedItem.ToString();
-                    serialPort1.Open();
-                    serialConnectButton.Text = "Disconnect";
+                    if (!(serialPort1.IsOpen))
+                    {
+                        serialPort1.PortName = COMPortComboBox.SelectedItem.ToString();
+                        serialPort1.Open();
+                        serialConnectButton.Text = "Disconnect";
 
-                    positionControlGroupBox.Enabled = true;
-                    jogControlGroupBox.Enabled = true;
-                    homeAxesGroupBox.Enabled = true;
-                }
-                else if (serialPort1.IsOpen)
-                {
-                    serialPort1.Close();
-                    serialConnectButton.Text = "Conenct";
+                        positionControlGroupBox.Enabled = true;
+                        jogControlGroupBox.Enabled = true;
+                        homeAxesGroupBox.Enabled = true;
+                        startBendCycleBtn.Enabled = true;
+                        eStopButton.Enabled = true;
+                    }
+                    else if (serialPort1.IsOpen)
+                    {
+                        serialPort1.Close();
+                        serialConnectButton.Text = "Conenct";
 
-                    positionControlGroupBox.Enabled = false;
-                    jogControlGroupBox.Enabled = false;
-                    homeAxesGroupBox.Enabled = false;
+                        positionControlGroupBox.Enabled = false;
+                        jogControlGroupBox.Enabled = false;
+                        homeAxesGroupBox.Enabled = false;
+                        startBendCycleBtn.Enabled = false;
+                        eStopButton.Enabled = false;
+                    }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
@@ -1191,7 +1405,7 @@ namespace _3D_Bender
 
             double gearRatioAB = 100;
             double stepsPerUnitAB = gearRatioAB / 1.8;
-            
+
             settings.Rows.Add(new object[]
                 {"5-Axis Bender", "mm", 12 * 25.4, 28, -21, 8, 26, 305, -5, 60, -60, 30, -30, stepsPerUnitXY, stepsPerUnitXY, stepsPerUnitZ, stepsPerUnitAB, stepsPerUnitAB, 15.79 });
 
@@ -1217,10 +1431,25 @@ namespace _3D_Bender
             //On data recieved we have to do some parsing to check whats going on
             //Should be in the format actual position, then commanded position
             buffer += serialPort1.ReadExisting();
-            if (buffer.Contains("\n"))
+            if (buffer.Contains("\n"))  //When the buffer has \n then the entire string must have been received
             {
-                UpdatePositionalData(buffer);
-                buffer = String.Empty;
+                if (buffer.Contains("zFlag"))
+                {
+                    zFlag = true;
+                    Console.WriteLine(buffer);
+                    buffer = String.Empty;
+                }
+                else if (buffer.Contains("nextLine"))
+                {
+                    nextLine = true;
+                    Console.WriteLine(buffer);
+                    buffer = String.Empty;
+                }
+                else
+                {
+                    UpdatePositionalData(buffer);
+                    buffer = String.Empty;
+                }
             }
 
         }
@@ -1393,64 +1622,219 @@ namespace _3D_Bender
 
         private void MoveToPosXButton_Click(object sender, EventArgs e)
         {
-            SerialWrite("G01 X" + actualPosXTextBox.Text);
-        }
-
-        private void MoveToPosYButton_Click(object sender, EventArgs e)
-        {
-            SerialWrite("G01 Y" + actualPosYTextBox.Text);
-        }
-
-        private void MoveToPosZButton_Click(object sender, EventArgs e)
-        {
-            SerialWrite("G01 Z" + actualPosZTextBox.Text);
-        }
-
-        private void MoveToPosAButton_Click(object sender, EventArgs e)
-        {
-            SerialWrite("G01 A" + actualPosATextBox.Text);
-        }
-
-        private void MoveToPosBButton_Click(object sender, EventArgs e)
-        {
-            SerialWrite("G01 B" + actualPosBTextBox.Text);
+            SerialWrite("G01 X" + commandPosXTextBox.Text);
         }
 
         private void SetZeroXButton_Click(object sender, EventArgs e)
         {
             SerialWrite("G92 X0");
-            //actualPosXTextBox.Text = "0.000";
         }
 
         private void SetZeroYButton_Click(object sender, EventArgs e)
         {
             SerialWrite("G92 Y0");
-            //actualPosYTextBox.Text = "0.000";
         }
 
         private void SetZeroZButton_Click(object sender, EventArgs e)
         {
             SerialWrite("G92 Z0");
-            //actualPosZTextBox.Text = "0.000";
         }
 
         private void SetZeroAButton_Click(object sender, EventArgs e)
         {
             SerialWrite("G92 A0");
-            //actualPosATextBox.Text = "0.000";
         }
 
         private void SetZeroBButton_Click(object sender, EventArgs e)
         {
             SerialWrite("G92 B0");
-            //actualPosBTextBox.Text = "0.000";
         }
-        
+
         private void benderConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form3 form3 = new Form3(localPath);
             form3.ShowDialog();
         }
+
+        private void HomeXButton_Click(object sender, EventArgs e)
+        {
+            string command = "G1";
+            command += " X0";
+            command += " Y";
+            command += commandPosYTextBox.Text;
+            command += " Z";
+            command += commandPosZTextBox.Text;
+            command += " A";
+            command += commandPosATextBox.Text;
+            command += " B";
+            command += commandPosBTextBox.Text;
+
+            SerialWrite(command);
+        }
+
+        private void HomeYButton_Click(object sender, EventArgs e)
+        {
+            string command = "G1";
+            command += " X";
+            command += commandPosXTextBox.Text;
+            command += " Y0 ";
+            command += " Z";
+            command += commandPosZTextBox.Text;
+            command += " A";
+            command += commandPosATextBox.Text;
+            command += " B";
+            command += commandPosBTextBox.Text;
+
+            SerialWrite(command);
+        }
+
+        private void HomeZButton_Click(object sender, EventArgs e)
+        {
+            string command = "G1";
+            command += " X";
+            command += commandPosXTextBox.Text;
+            command += " Y";
+            command += commandPosYTextBox.Text;
+            command += " Z0";
+            command += " A";
+            command += commandPosATextBox.Text;
+            command += " B";
+            command += commandPosBTextBox.Text;
+
+            SerialWrite(command);
+        }
+
+        private void HomeAButton_Click(object sender, EventArgs e)
+        {
+            string command = "G1";
+            command += " X";
+            command += commandPosXTextBox.Text;
+            command += " Y";
+            command += commandPosYTextBox.Text;
+            command += " Z";
+            command += commandPosZTextBox.Text;
+            command += " A0";
+            command += " B";
+            command += commandPosBTextBox.Text;
+
+            SerialWrite(command);
+        }
+
+        private void HomeBButton_Click(object sender, EventArgs e)
+        {
+            string command = "G1";
+            command += " X";
+            command += commandPosXTextBox.Text;
+            command += " Y";
+            command += commandPosYTextBox.Text;
+            command += " Z";
+            command += commandPosZTextBox.Text;
+            command += " A";
+            command += commandPosATextBox.Text;
+            command += " B0";
+
+            SerialWrite(command);
+        }
+
+        private void HomeAllButton_Click(object sender, EventArgs e)
+        {
+            SerialWrite("G28");
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                serialPort1.Close();
+            }
+        }
+        private void StartBendCycleBtn_Click(object sender, EventArgs e)
+        {
+            SerialWrite("M199");
+        }
+
+        private void StartBendCycleUSBBtn_Click(object sender, EventArgs e)
+        {
+            GenerateGCodeListUSB();
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            SerialWrite("M200");    //Start the bender
+
+            //Background worker sends the G Code over serial then waits for the zflag to come from the bender
+            foreach (string command in GCodeList)
+            {
+                SerialWrite(command);
+                Console.WriteLine(command);
+
+                while (!zFlag || !nextLine) //Wait for either flag to come from the bender
+                {
+                    if (zFlag)
+                    {
+                        zFlag = false;
+                        break;
+                    }
+
+                    if (nextLine)
+                    {
+                        nextLine = false;
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        private void BackgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        private void MdiBtn_Click(object sender, EventArgs e)
+        {
+            string command = "G01";
+
+            command += " X";
+            if (xMDITextBox.Text == String.Empty)
+                command += commandPosXTextBox.Text;
+            else
+                command += xMDITextBox.Text;
+
+            command += " Y";
+            if (yMDITextBox.Text == String.Empty)
+                command += commandPosYTextBox.Text;
+            else
+                command += yMDITextBox.Text;
+
+            command += " Z";
+            if (zMDITextBox.Text == String.Empty)
+                command += commandPosZTextBox.Text;
+            else
+                command += zMDITextBox.Text;
+
+            command += " A";
+            if (aMDITextBox.Text == String.Empty)
+                command += commandPosATextBox.Text;
+            else
+                command += aMDITextBox.Text;
+
+            command += " B";
+            if (bMDITextBox.Text == String.Empty)
+                command += commandPosBTextBox.Text;
+            else
+                command += bMDITextBox.Text;
+
+            SerialWrite(command);
+
+            xMDITextBox.Text = string.Empty;
+            yMDITextBox.Text = string.Empty;
+            zMDITextBox.Text = string.Empty;
+            aMDITextBox.Text = string.Empty;
+            bMDITextBox.Text = string.Empty;
+        }
+
 
     }
 

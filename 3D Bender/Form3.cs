@@ -43,7 +43,7 @@ namespace _3D_Bender
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     settingsPath = ofd.FileName;
-                    
+
                     using (StreamReader sr = new StreamReader(settingsPath))
                     {
                         settings.ReadXml(sr);

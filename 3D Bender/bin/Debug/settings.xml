@@ -2,22 +2,23 @@
   <Settings>
     <ConfigName>5-Axis Bender</ConfigName>
     <DefaultUnits>mm</DefaultUnits>
-    <StockLength>304.79999999999995</StockLength>
-    <XPosLimit>28</XPosLimit>
-    <XNegLimit>-21</XNegLimit>
-    <YPosLimit>8</YPosLimit>
-    <YNegLimit>26</YNegLimit>
-    <ZPosLimit>305</ZPosLimit>
-    <ZNegLimit>-5</ZNegLimit>
-    <APosLimit>60</APosLimit>
-    <ANegLimit>-60</ANegLimit>
+    <StockLength>200</StockLength>
+    <XPosLimit>15</XPosLimit>
+    <XNegLimit>-15</XNegLimit>
+    <YPosLimit>12</YPosLimit>
+    <YNegLimit>-12</YNegLimit>
+    <ZPosLimit>200</ZPosLimit>
+    <ZNegLimit>0</ZNegLimit>
+    <APosLimit>80</APosLimit>
+    <ANegLimit>-80</ANegLimit>
     <BPosLimit>30</BPosLimit>
     <BNegLimit>-30</BNegLimit>
     <StepsPerUnitX>500</StepsPerUnitX>
     <StepsPerUnitY>500</StepsPerUnitY>
-    <StepsPerUnitZ>100</StepsPerUnitZ>
+    <StepsPerUnitZ>200</StepsPerUnitZ>
     <StepsPerUnitA>55.555555555555557</StepsPerUnitA>
     <StepsPerUnitB>55.555555555555557</StepsPerUnitB>
     <BendingHeadFixedDist>15.79</BendingHeadFixedDist>
+    <OverBendMultiplier>1.5</OverBendMultiplier>
   </Settings>
 </DocumentElement>

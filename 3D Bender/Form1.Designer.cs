@@ -73,31 +73,39 @@
             this.actualPosATextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.actualPosBTextBox = new System.Windows.Forms.TextBox();
-            this.moveToPosXButton = new System.Windows.Forms.Button();
-            this.moveToPosYButton = new System.Windows.Forms.Button();
-            this.moveToPosZButton = new System.Windows.Forms.Button();
-            this.moveToPosAButton = new System.Windows.Forms.Button();
-            this.moveToPosBButton = new System.Windows.Forms.Button();
+            this.mdiBtn = new System.Windows.Forms.Button();
             this.setZeroXButton = new System.Windows.Forms.Button();
             this.setZeroYButton = new System.Windows.Forms.Button();
             this.setZeroZButton = new System.Windows.Forms.Button();
             this.setZeroAButton = new System.Windows.Forms.Button();
             this.setZeroBButton = new System.Windows.Forms.Button();
             this.positionControlGroupBox = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.bMDITextBox = new System.Windows.Forms.TextBox();
+            this.aMDITextBox = new System.Windows.Forms.TextBox();
+            this.zMDITextBox = new System.Windows.Forms.TextBox();
+            this.yMDITextBox = new System.Windows.Forms.TextBox();
+            this.xMDITextBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.commandPosBTextBox = new System.Windows.Forms.TextBox();
             this.commandPosATextBox = new System.Windows.Forms.TextBox();
             this.commandPosZTextBox = new System.Windows.Forms.TextBox();
             this.commandPosYTextBox = new System.Windows.Forms.TextBox();
             this.commandPosXTextBox = new System.Windows.Forms.TextBox();
             this.jogControlGroupBox = new System.Windows.Forms.GroupBox();
+            this.jog1RadioBtn = new System.Windows.Forms.RadioButton();
+            this.jog01RadioBtn = new System.Windows.Forms.RadioButton();
             this.buttonTimer = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.COMPortComboBox = new System.Windows.Forms.ComboBox();
             this.refreshCOMPortsButton = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.homeAxesGroupBox = new System.Windows.Forms.GroupBox();
             this.totalMaterialTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.startBendCycleBtn = new System.Windows.Forms.Button();
+            this.startBendCycleUSBBtn = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.positionControlGroupBox.SuspendLayout();
@@ -124,7 +132,7 @@
             // 
             // genGCodeButton
             // 
-            this.genGCodeButton.Location = new System.Drawing.Point(420, 400);
+            this.genGCodeButton.Location = new System.Drawing.Point(420, 404);
             this.genGCodeButton.Name = "genGCodeButton";
             this.genGCodeButton.Size = new System.Drawing.Size(75, 38);
             this.genGCodeButton.TabIndex = 3;
@@ -256,7 +264,7 @@
             // 
             // jogPosXButton
             // 
-            this.jogPosXButton.Location = new System.Drawing.Point(246, 59);
+            this.jogPosXButton.Location = new System.Drawing.Point(219, 59);
             this.jogPosXButton.Name = "jogPosXButton";
             this.jogPosXButton.Size = new System.Drawing.Size(55, 23);
             this.jogPosXButton.TabIndex = 7;
@@ -267,7 +275,7 @@
             // 
             // jogNegXButton
             // 
-            this.jogNegXButton.Location = new System.Drawing.Point(185, 59);
+            this.jogNegXButton.Location = new System.Drawing.Point(158, 59);
             this.jogNegXButton.Name = "jogNegXButton";
             this.jogNegXButton.Size = new System.Drawing.Size(55, 23);
             this.jogNegXButton.TabIndex = 8;
@@ -278,7 +286,7 @@
             // 
             // jogPosYButton
             // 
-            this.jogPosYButton.Location = new System.Drawing.Point(47, 30);
+            this.jogPosYButton.Location = new System.Drawing.Point(36, 30);
             this.jogPosYButton.Name = "jogPosYButton";
             this.jogPosYButton.Size = new System.Drawing.Size(55, 23);
             this.jogPosYButton.TabIndex = 9;
@@ -289,7 +297,7 @@
             // 
             // jogNegYButton
             // 
-            this.jogNegYButton.Location = new System.Drawing.Point(47, 88);
+            this.jogNegYButton.Location = new System.Drawing.Point(36, 88);
             this.jogNegYButton.Name = "jogNegYButton";
             this.jogNegYButton.Size = new System.Drawing.Size(55, 23);
             this.jogNegYButton.TabIndex = 10;
@@ -301,8 +309,9 @@
             // eStopButton
             // 
             this.eStopButton.BackColor = System.Drawing.Color.Red;
+            this.eStopButton.Enabled = false;
             this.eStopButton.ForeColor = System.Drawing.Color.White;
-            this.eStopButton.Location = new System.Drawing.Point(501, 395);
+            this.eStopButton.Location = new System.Drawing.Point(664, 400);
             this.eStopButton.Name = "eStopButton";
             this.eStopButton.Size = new System.Drawing.Size(89, 49);
             this.eStopButton.TabIndex = 11;
@@ -312,7 +321,7 @@
             // 
             // jogNegBButton
             // 
-            this.jogNegBButton.Location = new System.Drawing.Point(14, 59);
+            this.jogNegBButton.Location = new System.Drawing.Point(6, 59);
             this.jogNegBButton.Name = "jogNegBButton";
             this.jogNegBButton.Size = new System.Drawing.Size(55, 23);
             this.jogNegBButton.TabIndex = 12;
@@ -323,7 +332,7 @@
             // 
             // jogPosBButton
             // 
-            this.jogPosBButton.Location = new System.Drawing.Point(75, 59);
+            this.jogPosBButton.Location = new System.Drawing.Point(67, 59);
             this.jogPosBButton.Name = "jogPosBButton";
             this.jogPosBButton.Size = new System.Drawing.Size(55, 23);
             this.jogPosBButton.TabIndex = 13;
@@ -334,7 +343,7 @@
             // 
             // jogPosAButton
             // 
-            this.jogPosAButton.Location = new System.Drawing.Point(218, 88);
+            this.jogPosAButton.Location = new System.Drawing.Point(188, 88);
             this.jogPosAButton.Name = "jogPosAButton";
             this.jogPosAButton.Size = new System.Drawing.Size(55, 23);
             this.jogPosAButton.TabIndex = 14;
@@ -345,7 +354,7 @@
             // 
             // jogNegAButton
             // 
-            this.jogNegAButton.Location = new System.Drawing.Point(218, 30);
+            this.jogNegAButton.Location = new System.Drawing.Point(188, 30);
             this.jogNegAButton.Name = "jogNegAButton";
             this.jogNegAButton.Size = new System.Drawing.Size(55, 23);
             this.jogNegAButton.TabIndex = 15;
@@ -356,7 +365,7 @@
             // 
             // jogPosZButton
             // 
-            this.jogPosZButton.Location = new System.Drawing.Point(130, 30);
+            this.jogPosZButton.Location = new System.Drawing.Point(112, 30);
             this.jogPosZButton.Name = "jogPosZButton";
             this.jogPosZButton.Size = new System.Drawing.Size(55, 23);
             this.jogPosZButton.TabIndex = 16;
@@ -367,7 +376,7 @@
             // 
             // jogNegZButton
             // 
-            this.jogNegZButton.Location = new System.Drawing.Point(130, 88);
+            this.jogNegZButton.Location = new System.Drawing.Point(112, 88);
             this.jogNegZButton.Name = "jogNegZButton";
             this.jogNegZButton.Size = new System.Drawing.Size(55, 23);
             this.jogNegZButton.TabIndex = 17;
@@ -384,6 +393,7 @@
             this.homeXButton.TabIndex = 18;
             this.homeXButton.Text = "Home X";
             this.homeXButton.UseVisualStyleBackColor = true;
+            this.homeXButton.Click += new System.EventHandler(this.HomeXButton_Click);
             // 
             // homeYButton
             // 
@@ -393,6 +403,7 @@
             this.homeYButton.TabIndex = 19;
             this.homeYButton.Text = "Home Y";
             this.homeYButton.UseVisualStyleBackColor = true;
+            this.homeYButton.Click += new System.EventHandler(this.HomeYButton_Click);
             // 
             // homeZButton
             // 
@@ -402,6 +413,7 @@
             this.homeZButton.TabIndex = 20;
             this.homeZButton.Text = "Home Z";
             this.homeZButton.UseVisualStyleBackColor = true;
+            this.homeZButton.Click += new System.EventHandler(this.HomeZButton_Click);
             // 
             // homeAButton
             // 
@@ -411,6 +423,7 @@
             this.homeAButton.TabIndex = 21;
             this.homeAButton.Text = "Home A";
             this.homeAButton.UseVisualStyleBackColor = true;
+            this.homeAButton.Click += new System.EventHandler(this.HomeAButton_Click);
             // 
             // homeBButton
             // 
@@ -420,6 +433,7 @@
             this.homeBButton.TabIndex = 22;
             this.homeBButton.Text = "Home B";
             this.homeBButton.UseVisualStyleBackColor = true;
+            this.homeBButton.Click += new System.EventHandler(this.HomeBButton_Click);
             // 
             // homeAllButton
             // 
@@ -429,10 +443,11 @@
             this.homeAllButton.TabIndex = 23;
             this.homeAllButton.Text = "Home All";
             this.homeAllButton.UseVisualStyleBackColor = true;
+            this.homeAllButton.Click += new System.EventHandler(this.HomeAllButton_Click);
             // 
             // actualPosXTextBox
             // 
-            this.actualPosXTextBox.Location = new System.Drawing.Point(26, 17);
+            this.actualPosXTextBox.Location = new System.Drawing.Point(28, 32);
             this.actualPosXTextBox.MaxLength = 8;
             this.actualPosXTextBox.Name = "actualPosXTextBox";
             this.actualPosXTextBox.Size = new System.Drawing.Size(54, 20);
@@ -442,7 +457,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 20);
+            this.label1.Location = new System.Drawing.Point(10, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(14, 13);
             this.label1.TabIndex = 25;
@@ -451,7 +466,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 46);
+            this.label2.Location = new System.Drawing.Point(10, 61);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(14, 13);
             this.label2.TabIndex = 27;
@@ -459,7 +474,7 @@
             // 
             // actualPosYTextBox
             // 
-            this.actualPosYTextBox.Location = new System.Drawing.Point(26, 43);
+            this.actualPosYTextBox.Location = new System.Drawing.Point(28, 58);
             this.actualPosYTextBox.MaxLength = 8;
             this.actualPosYTextBox.Name = "actualPosYTextBox";
             this.actualPosYTextBox.Size = new System.Drawing.Size(54, 20);
@@ -469,7 +484,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 72);
+            this.label3.Location = new System.Drawing.Point(10, 87);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(14, 13);
             this.label3.TabIndex = 29;
@@ -477,7 +492,7 @@
             // 
             // actualPosZTextBox
             // 
-            this.actualPosZTextBox.Location = new System.Drawing.Point(26, 69);
+            this.actualPosZTextBox.Location = new System.Drawing.Point(28, 84);
             this.actualPosZTextBox.MaxLength = 8;
             this.actualPosZTextBox.Name = "actualPosZTextBox";
             this.actualPosZTextBox.Size = new System.Drawing.Size(54, 20);
@@ -487,7 +502,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 98);
+            this.label4.Location = new System.Drawing.Point(10, 113);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(14, 13);
             this.label4.TabIndex = 31;
@@ -495,7 +510,7 @@
             // 
             // actualPosATextBox
             // 
-            this.actualPosATextBox.Location = new System.Drawing.Point(26, 95);
+            this.actualPosATextBox.Location = new System.Drawing.Point(28, 110);
             this.actualPosATextBox.MaxLength = 8;
             this.actualPosATextBox.Name = "actualPosATextBox";
             this.actualPosATextBox.Size = new System.Drawing.Size(54, 20);
@@ -505,7 +520,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 124);
+            this.label5.Location = new System.Drawing.Point(10, 139);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(14, 13);
             this.label5.TabIndex = 33;
@@ -513,66 +528,26 @@
             // 
             // actualPosBTextBox
             // 
-            this.actualPosBTextBox.Location = new System.Drawing.Point(26, 121);
+            this.actualPosBTextBox.Location = new System.Drawing.Point(28, 136);
             this.actualPosBTextBox.MaxLength = 8;
             this.actualPosBTextBox.Name = "actualPosBTextBox";
             this.actualPosBTextBox.Size = new System.Drawing.Size(54, 20);
             this.actualPosBTextBox.TabIndex = 32;
             this.actualPosBTextBox.Text = "0.000";
             // 
-            // moveToPosXButton
+            // mdiBtn
             // 
-            this.moveToPosXButton.Location = new System.Drawing.Point(157, 15);
-            this.moveToPosXButton.Name = "moveToPosXButton";
-            this.moveToPosXButton.Size = new System.Drawing.Size(55, 23);
-            this.moveToPosXButton.TabIndex = 34;
-            this.moveToPosXButton.Text = "Move to";
-            this.moveToPosXButton.UseVisualStyleBackColor = true;
-            this.moveToPosXButton.Click += new System.EventHandler(this.MoveToPosXButton_Click);
-            // 
-            // moveToPosYButton
-            // 
-            this.moveToPosYButton.Location = new System.Drawing.Point(157, 41);
-            this.moveToPosYButton.Name = "moveToPosYButton";
-            this.moveToPosYButton.Size = new System.Drawing.Size(55, 23);
-            this.moveToPosYButton.TabIndex = 35;
-            this.moveToPosYButton.Text = "Move to";
-            this.moveToPosYButton.UseVisualStyleBackColor = true;
-            this.moveToPosYButton.Click += new System.EventHandler(this.MoveToPosYButton_Click);
-            // 
-            // moveToPosZButton
-            // 
-            this.moveToPosZButton.Location = new System.Drawing.Point(157, 67);
-            this.moveToPosZButton.Name = "moveToPosZButton";
-            this.moveToPosZButton.Size = new System.Drawing.Size(55, 23);
-            this.moveToPosZButton.TabIndex = 36;
-            this.moveToPosZButton.Text = "Move to";
-            this.moveToPosZButton.UseVisualStyleBackColor = true;
-            this.moveToPosZButton.Click += new System.EventHandler(this.MoveToPosZButton_Click);
-            // 
-            // moveToPosAButton
-            // 
-            this.moveToPosAButton.Location = new System.Drawing.Point(157, 93);
-            this.moveToPosAButton.Name = "moveToPosAButton";
-            this.moveToPosAButton.Size = new System.Drawing.Size(55, 23);
-            this.moveToPosAButton.TabIndex = 37;
-            this.moveToPosAButton.Text = "Move to";
-            this.moveToPosAButton.UseVisualStyleBackColor = true;
-            this.moveToPosAButton.Click += new System.EventHandler(this.MoveToPosAButton_Click);
-            // 
-            // moveToPosBButton
-            // 
-            this.moveToPosBButton.Location = new System.Drawing.Point(157, 119);
-            this.moveToPosBButton.Name = "moveToPosBButton";
-            this.moveToPosBButton.Size = new System.Drawing.Size(55, 23);
-            this.moveToPosBButton.TabIndex = 38;
-            this.moveToPosBButton.Text = "Move to";
-            this.moveToPosBButton.UseVisualStyleBackColor = true;
-            this.moveToPosBButton.Click += new System.EventHandler(this.MoveToPosBButton_Click);
+            this.mdiBtn.Location = new System.Drawing.Point(221, 82);
+            this.mdiBtn.Name = "mdiBtn";
+            this.mdiBtn.Size = new System.Drawing.Size(55, 23);
+            this.mdiBtn.TabIndex = 34;
+            this.mdiBtn.Text = "Submit";
+            this.mdiBtn.UseVisualStyleBackColor = true;
+            this.mdiBtn.Click += new System.EventHandler(this.MdiBtn_Click);
             // 
             // setZeroXButton
             // 
-            this.setZeroXButton.Location = new System.Drawing.Point(218, 15);
+            this.setZeroXButton.Location = new System.Drawing.Point(149, 31);
             this.setZeroXButton.Name = "setZeroXButton";
             this.setZeroXButton.Size = new System.Drawing.Size(55, 23);
             this.setZeroXButton.TabIndex = 39;
@@ -582,7 +557,7 @@
             // 
             // setZeroYButton
             // 
-            this.setZeroYButton.Location = new System.Drawing.Point(218, 41);
+            this.setZeroYButton.Location = new System.Drawing.Point(149, 57);
             this.setZeroYButton.Name = "setZeroYButton";
             this.setZeroYButton.Size = new System.Drawing.Size(55, 23);
             this.setZeroYButton.TabIndex = 40;
@@ -592,7 +567,7 @@
             // 
             // setZeroZButton
             // 
-            this.setZeroZButton.Location = new System.Drawing.Point(218, 67);
+            this.setZeroZButton.Location = new System.Drawing.Point(149, 83);
             this.setZeroZButton.Name = "setZeroZButton";
             this.setZeroZButton.Size = new System.Drawing.Size(55, 23);
             this.setZeroZButton.TabIndex = 41;
@@ -602,7 +577,7 @@
             // 
             // setZeroAButton
             // 
-            this.setZeroAButton.Location = new System.Drawing.Point(218, 93);
+            this.setZeroAButton.Location = new System.Drawing.Point(149, 109);
             this.setZeroAButton.Name = "setZeroAButton";
             this.setZeroAButton.Size = new System.Drawing.Size(55, 23);
             this.setZeroAButton.TabIndex = 42;
@@ -612,7 +587,7 @@
             // 
             // setZeroBButton
             // 
-            this.setZeroBButton.Location = new System.Drawing.Point(218, 119);
+            this.setZeroBButton.Location = new System.Drawing.Point(149, 135);
             this.setZeroBButton.Name = "setZeroBButton";
             this.setZeroBButton.Size = new System.Drawing.Size(55, 23);
             this.setZeroBButton.TabIndex = 43;
@@ -622,6 +597,14 @@
             // 
             // positionControlGroupBox
             // 
+            this.positionControlGroupBox.Controls.Add(this.label9);
+            this.positionControlGroupBox.Controls.Add(this.bMDITextBox);
+            this.positionControlGroupBox.Controls.Add(this.aMDITextBox);
+            this.positionControlGroupBox.Controls.Add(this.zMDITextBox);
+            this.positionControlGroupBox.Controls.Add(this.yMDITextBox);
+            this.positionControlGroupBox.Controls.Add(this.xMDITextBox);
+            this.positionControlGroupBox.Controls.Add(this.label8);
+            this.positionControlGroupBox.Controls.Add(this.label7);
             this.positionControlGroupBox.Controls.Add(this.commandPosBTextBox);
             this.positionControlGroupBox.Controls.Add(this.commandPosATextBox);
             this.positionControlGroupBox.Controls.Add(this.commandPosZTextBox);
@@ -632,11 +615,7 @@
             this.positionControlGroupBox.Controls.Add(this.setZeroZButton);
             this.positionControlGroupBox.Controls.Add(this.setZeroYButton);
             this.positionControlGroupBox.Controls.Add(this.setZeroXButton);
-            this.positionControlGroupBox.Controls.Add(this.moveToPosBButton);
-            this.positionControlGroupBox.Controls.Add(this.moveToPosAButton);
-            this.positionControlGroupBox.Controls.Add(this.moveToPosZButton);
-            this.positionControlGroupBox.Controls.Add(this.moveToPosYButton);
-            this.positionControlGroupBox.Controls.Add(this.moveToPosXButton);
+            this.positionControlGroupBox.Controls.Add(this.mdiBtn);
             this.positionControlGroupBox.Controls.Add(this.label5);
             this.positionControlGroupBox.Controls.Add(this.actualPosBTextBox);
             this.positionControlGroupBox.Controls.Add(this.label4);
@@ -648,60 +627,134 @@
             this.positionControlGroupBox.Controls.Add(this.label1);
             this.positionControlGroupBox.Controls.Add(this.actualPosXTextBox);
             this.positionControlGroupBox.Enabled = false;
-            this.positionControlGroupBox.Location = new System.Drawing.Point(764, 38);
+            this.positionControlGroupBox.Location = new System.Drawing.Point(764, 27);
             this.positionControlGroupBox.Name = "positionControlGroupBox";
-            this.positionControlGroupBox.Size = new System.Drawing.Size(286, 150);
+            this.positionControlGroupBox.Size = new System.Drawing.Size(341, 161);
             this.positionControlGroupBox.TabIndex = 44;
             this.positionControlGroupBox.TabStop = false;
             this.positionControlGroupBox.Text = "Position Control";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(294, 16);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(27, 13);
+            this.label9.TabIndex = 56;
+            this.label9.Text = "MDI";
+            // 
+            // bMDITextBox
+            // 
+            this.bMDITextBox.Location = new System.Drawing.Point(282, 136);
+            this.bMDITextBox.MaxLength = 8;
+            this.bMDITextBox.Name = "bMDITextBox";
+            this.bMDITextBox.Size = new System.Drawing.Size(54, 20);
+            this.bMDITextBox.TabIndex = 55;
+            // 
+            // aMDITextBox
+            // 
+            this.aMDITextBox.Location = new System.Drawing.Point(282, 110);
+            this.aMDITextBox.MaxLength = 8;
+            this.aMDITextBox.Name = "aMDITextBox";
+            this.aMDITextBox.Size = new System.Drawing.Size(54, 20);
+            this.aMDITextBox.TabIndex = 54;
+            // 
+            // zMDITextBox
+            // 
+            this.zMDITextBox.Location = new System.Drawing.Point(282, 84);
+            this.zMDITextBox.MaxLength = 8;
+            this.zMDITextBox.Name = "zMDITextBox";
+            this.zMDITextBox.Size = new System.Drawing.Size(54, 20);
+            this.zMDITextBox.TabIndex = 53;
+            // 
+            // yMDITextBox
+            // 
+            this.yMDITextBox.Location = new System.Drawing.Point(282, 58);
+            this.yMDITextBox.MaxLength = 8;
+            this.yMDITextBox.Name = "yMDITextBox";
+            this.yMDITextBox.Size = new System.Drawing.Size(54, 20);
+            this.yMDITextBox.TabIndex = 52;
+            // 
+            // xMDITextBox
+            // 
+            this.xMDITextBox.Location = new System.Drawing.Point(282, 32);
+            this.xMDITextBox.MaxLength = 8;
+            this.xMDITextBox.Name = "xMDITextBox";
+            this.xMDITextBox.Size = new System.Drawing.Size(54, 20);
+            this.xMDITextBox.TabIndex = 51;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(81, 16);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(66, 13);
+            this.label8.TabIndex = 50;
+            this.label8.Text = "Commanded";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(36, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(37, 13);
+            this.label7.TabIndex = 49;
+            this.label7.Text = "Actual";
+            // 
             // commandPosBTextBox
             // 
-            this.commandPosBTextBox.Location = new System.Drawing.Point(86, 121);
+            this.commandPosBTextBox.Location = new System.Drawing.Point(88, 136);
             this.commandPosBTextBox.MaxLength = 8;
             this.commandPosBTextBox.Name = "commandPosBTextBox";
             this.commandPosBTextBox.ReadOnly = true;
             this.commandPosBTextBox.Size = new System.Drawing.Size(54, 20);
             this.commandPosBTextBox.TabIndex = 48;
+            this.commandPosBTextBox.Text = "0.000";
             // 
             // commandPosATextBox
             // 
-            this.commandPosATextBox.Location = new System.Drawing.Point(86, 95);
+            this.commandPosATextBox.Location = new System.Drawing.Point(88, 110);
             this.commandPosATextBox.MaxLength = 8;
             this.commandPosATextBox.Name = "commandPosATextBox";
             this.commandPosATextBox.ReadOnly = true;
             this.commandPosATextBox.Size = new System.Drawing.Size(54, 20);
             this.commandPosATextBox.TabIndex = 47;
+            this.commandPosATextBox.Text = "0.000";
             // 
             // commandPosZTextBox
             // 
-            this.commandPosZTextBox.Location = new System.Drawing.Point(86, 69);
+            this.commandPosZTextBox.Location = new System.Drawing.Point(88, 84);
             this.commandPosZTextBox.MaxLength = 8;
             this.commandPosZTextBox.Name = "commandPosZTextBox";
             this.commandPosZTextBox.ReadOnly = true;
             this.commandPosZTextBox.Size = new System.Drawing.Size(54, 20);
             this.commandPosZTextBox.TabIndex = 46;
+            this.commandPosZTextBox.Text = "0.000";
             // 
             // commandPosYTextBox
             // 
-            this.commandPosYTextBox.Location = new System.Drawing.Point(86, 43);
+            this.commandPosYTextBox.Location = new System.Drawing.Point(88, 58);
             this.commandPosYTextBox.MaxLength = 8;
             this.commandPosYTextBox.Name = "commandPosYTextBox";
             this.commandPosYTextBox.ReadOnly = true;
             this.commandPosYTextBox.Size = new System.Drawing.Size(54, 20);
             this.commandPosYTextBox.TabIndex = 45;
+            this.commandPosYTextBox.Text = "0.000";
             // 
             // commandPosXTextBox
             // 
-            this.commandPosXTextBox.Location = new System.Drawing.Point(86, 17);
+            this.commandPosXTextBox.Location = new System.Drawing.Point(88, 32);
             this.commandPosXTextBox.MaxLength = 8;
             this.commandPosXTextBox.Name = "commandPosXTextBox";
             this.commandPosXTextBox.ReadOnly = true;
             this.commandPosXTextBox.Size = new System.Drawing.Size(54, 20);
             this.commandPosXTextBox.TabIndex = 44;
+            this.commandPosXTextBox.Text = "0.000";
             // 
             // jogControlGroupBox
             // 
+            this.jogControlGroupBox.Controls.Add(this.jog1RadioBtn);
+            this.jogControlGroupBox.Controls.Add(this.jog01RadioBtn);
             this.jogControlGroupBox.Controls.Add(this.jogNegZButton);
             this.jogControlGroupBox.Controls.Add(this.jogPosZButton);
             this.jogControlGroupBox.Controls.Add(this.jogNegAButton);
@@ -715,31 +768,43 @@
             this.jogControlGroupBox.Enabled = false;
             this.jogControlGroupBox.Location = new System.Drawing.Point(764, 194);
             this.jogControlGroupBox.Name = "jogControlGroupBox";
-            this.jogControlGroupBox.Size = new System.Drawing.Size(314, 138);
+            this.jogControlGroupBox.Size = new System.Drawing.Size(341, 138);
             this.jogControlGroupBox.TabIndex = 45;
             this.jogControlGroupBox.TabStop = false;
             this.jogControlGroupBox.Text = "Jog Control";
             // 
+            // jog1RadioBtn
+            // 
+            this.jog1RadioBtn.AutoSize = true;
+            this.jog1RadioBtn.Location = new System.Drawing.Point(284, 33);
+            this.jog1RadioBtn.Name = "jog1RadioBtn";
+            this.jog1RadioBtn.Size = new System.Drawing.Size(47, 17);
+            this.jog1RadioBtn.TabIndex = 19;
+            this.jog1RadioBtn.Text = "1mm";
+            this.jog1RadioBtn.UseVisualStyleBackColor = true;
+            // 
+            // jog01RadioBtn
+            // 
+            this.jog01RadioBtn.AutoSize = true;
+            this.jog01RadioBtn.Checked = true;
+            this.jog01RadioBtn.Location = new System.Drawing.Point(284, 10);
+            this.jog01RadioBtn.Name = "jog01RadioBtn";
+            this.jog01RadioBtn.Size = new System.Drawing.Size(56, 17);
+            this.jog01RadioBtn.TabIndex = 18;
+            this.jog01RadioBtn.TabStop = true;
+            this.jog01RadioBtn.Text = "0.1mm";
+            this.jog01RadioBtn.UseVisualStyleBackColor = true;
+            // 
             // buttonTimer
             // 
             this.buttonTimer.Tick += new System.EventHandler(this.ButtonTimer_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(640, 415);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 46;
-            this.button1.Text = "Test Button";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // COMPortComboBox
             // 
             this.COMPortComboBox.FormattingEnabled = true;
             this.COMPortComboBox.Location = new System.Drawing.Point(1024, 359);
             this.COMPortComboBox.Name = "COMPortComboBox";
-            this.COMPortComboBox.Size = new System.Drawing.Size(79, 21);
+            this.COMPortComboBox.Size = new System.Drawing.Size(75, 21);
             this.COMPortComboBox.TabIndex = 47;
             // 
             // refreshCOMPortsButton
@@ -791,17 +856,44 @@
             this.label6.TabIndex = 51;
             this.label6.Text = "Total Material:";
             // 
+            // startBendCycleBtn
+            // 
+            this.startBendCycleBtn.Enabled = false;
+            this.startBendCycleBtn.Location = new System.Drawing.Point(501, 404);
+            this.startBendCycleBtn.Name = "startBendCycleBtn";
+            this.startBendCycleBtn.Size = new System.Drawing.Size(75, 38);
+            this.startBendCycleBtn.TabIndex = 52;
+            this.startBendCycleBtn.Text = "Start Bend Cycle SD";
+            this.startBendCycleBtn.UseVisualStyleBackColor = true;
+            this.startBendCycleBtn.Click += new System.EventHandler(this.StartBendCycleBtn_Click);
+            // 
+            // startBendCycleUSBBtn
+            // 
+            this.startBendCycleUSBBtn.Location = new System.Drawing.Point(583, 404);
+            this.startBendCycleUSBBtn.Name = "startBendCycleUSBBtn";
+            this.startBendCycleUSBBtn.Size = new System.Drawing.Size(75, 38);
+            this.startBendCycleUSBBtn.TabIndex = 53;
+            this.startBendCycleUSBBtn.Text = "Start Bend Cycle USB";
+            this.startBendCycleUSBBtn.UseVisualStyleBackColor = true;
+            this.startBendCycleUSBBtn.Click += new System.EventHandler(this.StartBendCycleUSBBtn_Click);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker1_DoWork);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.BackgroundWorker1_RunWorkerCompleted);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 450);
+            this.Controls.Add(this.startBendCycleUSBBtn);
+            this.Controls.Add(this.startBendCycleBtn);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.totalMaterialTextBox);
             this.Controls.Add(this.homeAxesGroupBox);
             this.Controls.Add(this.refreshCOMPortsButton);
             this.Controls.Add(this.COMPortComboBox);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.jogControlGroupBox);
             this.Controls.Add(this.positionControlGroupBox);
             this.Controls.Add(this.eStopButton);
@@ -813,6 +905,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "3D Bender Interface";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
@@ -820,6 +913,7 @@
             this.positionControlGroupBox.ResumeLayout(false);
             this.positionControlGroupBox.PerformLayout();
             this.jogControlGroupBox.ResumeLayout(false);
+            this.jogControlGroupBox.PerformLayout();
             this.homeAxesGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -867,11 +961,7 @@
         private System.Windows.Forms.TextBox actualPosATextBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox actualPosBTextBox;
-        private System.Windows.Forms.Button moveToPosXButton;
-        private System.Windows.Forms.Button moveToPosYButton;
-        private System.Windows.Forms.Button moveToPosZButton;
-        private System.Windows.Forms.Button moveToPosAButton;
-        private System.Windows.Forms.Button moveToPosBButton;
+        private System.Windows.Forms.Button mdiBtn;
         private System.Windows.Forms.Button setZeroXButton;
         private System.Windows.Forms.Button setZeroYButton;
         private System.Windows.Forms.Button setZeroZButton;
@@ -880,7 +970,6 @@
         private System.Windows.Forms.GroupBox positionControlGroupBox;
         private System.Windows.Forms.GroupBox jogControlGroupBox;
         private System.Windows.Forms.Timer buttonTimer;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ComboBox COMPortComboBox;
         private System.Windows.Forms.Button refreshCOMPortsButton;
         private System.IO.Ports.SerialPort serialPort1;
@@ -897,6 +986,19 @@
         private System.Windows.Forms.TextBox totalMaterialTextBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ToolStripMenuItem benderConfigToolStripMenuItem;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.RadioButton jog1RadioBtn;
+        private System.Windows.Forms.RadioButton jog01RadioBtn;
+        private System.Windows.Forms.Button startBendCycleBtn;
+        private System.Windows.Forms.TextBox bMDITextBox;
+        private System.Windows.Forms.TextBox aMDITextBox;
+        private System.Windows.Forms.TextBox zMDITextBox;
+        private System.Windows.Forms.TextBox yMDITextBox;
+        private System.Windows.Forms.TextBox xMDITextBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button startBendCycleUSBBtn;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

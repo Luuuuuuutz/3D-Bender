@@ -62,7 +62,7 @@ namespace _3D_Bender
 
         private void HelixCheckBox_CheckedChanged(object sender, System.EventArgs e)
         {
-            if(helixCheckBox.Checked)
+            if (helixCheckBox.Checked)
             {
                 helixSettingsGroupBox.Visible = true;
                 helixSettingsGroupBox.Enabled = true;
